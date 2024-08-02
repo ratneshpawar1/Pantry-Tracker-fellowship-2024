@@ -1,9 +1,14 @@
 // components/Header.js
+"use client";
 import React from "react";
-import { Typography, Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { DarkModeToggle } from "./DarkModeToggle";
 
-export const Header = () => (
-  <Box display="flex" justifyContent="center" py={2}>
-    <Typography variant="h2">Pantry Tracker</Typography>
-  </Box>
-);
+export const Header = ({ theme, handleThemeChange }) => {
+  return (
+    <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" p={2} borderBottom="1px solid #ddd">
+      <Typography variant="h4">Pantry Tracker</Typography>
+      <DarkModeToggle checked={theme === "dark"} onChange={handleThemeChange} />
+    </Box>
+  );
+};
