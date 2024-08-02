@@ -20,12 +20,10 @@ export const AppContainer = () => {
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, "inventory"));
     const docs = await getDocs(snapshot);
-    const inventoryList = [];
-    docs.forEach((doc) => {
-      inventoryList.push({ name: doc.id, ...doc.data() });
-    });
+    const inventoryList = docs.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     setInventory(inventoryList);
   };
+  console.log(inventory);
 
   useEffect(() => {
     updateInventory();
@@ -37,33 +35,49 @@ export const AppContainer = () => {
   const addItem = async (item) => {
     const docRef = doc(collection(firestore, "inventory"), item.Name);
     const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const { quantity } = docSnap.data();
-      await setDoc(docRef, { quantity: quantity + 1 });
-    } else {
-      await setDoc(docRef, { ...item, quantity: 1 });
-    }
-    await updateInventory();
+    const newItem = {
+      id: item.id || docRef.id,
+      Name: item.Name,
+      Category: item.Category,
+      Nutritional_value: item.Nutritional_value,
+      ImageUrl: item.ImageUrl,
+      quantity: (docSnap.exists() ? docSnap.data().quantity : 0) + 1,
+      createdAt: item.createdAt || new Date(),
+    };
+    
+    await setDoc(docRef, newItem, { merge: true });
+    
+    setInventory(prevInventory => {
+      const existingItemIndex = prevInventory.findIndex(i => i.Name === item.Name);
+      if (existingItemIndex !== -1) {
+        const updatedInventory = [...prevInventory];
+        updatedInventory[existingItemIndex] = newItem;
+        return updatedInventory;
+      } else {
+        return [...prevInventory, newItem];
+      }
+    });
   };
 
   const removeItem = async (name) => {
     const docRef = doc(collection(firestore, "inventory"), name);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
+      console.log(docSnap.data());
       const { quantity } = docSnap.data();
-      if (quantity === 1) {
+      if (quantity <= 1) {
         await deleteDoc(docRef);
       } else {
-        await setDoc(docRef, { quantity: quantity - 1 });
+        await setDoc(docRef, { ...docSnap.data(), quantity: quantity - 1 }, { merge: true });
       }
     }
     await updateInventory();
   };
 
-  const toggleCardFlip = (name) => {
+  const toggleCardFlip = (itemId) => {
     setFlippedCards((prevFlippedCards) => ({
       ...prevFlippedCards,
-      [name]: !prevFlippedCards[name],
+      [itemId]: !prevFlippedCards[itemId],
     }));
   };
 
@@ -101,12 +115,12 @@ export const AppContainer = () => {
               Add New Item
             </Button>
             {filteredInventory.length > 0 ? (
-              <InventoryList
-                inventory={filteredInventory}
-                flippedCards={flippedCards}
-                onRemove={removeItem}
-                onFlip={toggleCardFlip}
-              />
+            <InventoryList
+            inventory={filteredInventory}
+            flippedCards={flippedCards}
+            onRemove={removeItem}
+            onFlip={toggleCardFlip}
+          />
             ) : (
               <Typography variant="h6" sx={{ mt: 4 }}>No items found in this category.</Typography>
             )}
