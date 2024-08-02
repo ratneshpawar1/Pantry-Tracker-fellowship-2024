@@ -3,8 +3,10 @@
 import React from "react";
 import { Switch, Box } from "@mui/material";
 import { styled } from "@mui/system";
+import { getNeumorphicStyles } from "./NeumorphicStyles";
 
 const AnimatedSwitch = styled(Switch)(({ theme }) => ({
+  ...getNeumorphicStyles(theme),
   width: 42,
   height: 26,
   padding: 0,
@@ -24,7 +26,7 @@ const AnimatedSwitch = styled(Switch)(({ theme }) => ({
         top: 0,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
-        fontSize: "18px", // Adjust icon size
+        fontSize: "18px",
       },
       "& + .MuiSwitch-track": {
         opacity: 1,
@@ -47,7 +49,7 @@ const AnimatedSwitch = styled(Switch)(({ theme }) => ({
       top: 0,
       backgroundRepeat: "no-repeat",
       backgroundPosition: "center",
-      fontSize: "18px", // Adjust icon size
+      fontSize: "18px",
     },
   },
   "& .MuiSwitch-track": {

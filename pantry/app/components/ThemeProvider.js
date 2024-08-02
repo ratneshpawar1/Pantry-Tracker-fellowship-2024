@@ -40,7 +40,7 @@ export const ThemeProvider = ({ children }) => {
     <MuiThemeProvider theme={currentTheme}>
       <CssBaseline />
       <Header theme={theme} handleThemeChange={handleThemeChange} />
-      <Box>
+      <Box width="100%" height="100vh" sx={{ backgroundColor: currentTheme.palette.background.default }}>
         {children}
       </Box>
     </MuiThemeProvider>

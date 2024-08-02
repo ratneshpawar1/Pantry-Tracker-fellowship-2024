@@ -5,10 +5,11 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import { InventoryList } from "./InventoryList";
 import { AddItemModal } from "./AddItemModal";
 import { CategorySelector } from "./CategorySelector";
-import { firestore } from "@/firebase";
+import { firestore } from "/firebase"; // Adjusted import path
 import { collection, doc, getDocs, query, setDoc, deleteDoc, getDoc } from "firebase/firestore";
-import { ThemeProvider } from "./ThemeProvider"; // Make sure to import ThemeProvider here
+import { ThemeProvider } from "./ThemeProvider"; // Ensure to import ThemeProvider
 import { GlobalStyles } from "./GlobalStyles"; // Import GlobalStyles
+import { getNeumorphicContainerStyles, getNeumorphicButtonStyles } from "./NeumorphicStyles";
 
 export const AppContainer = () => {
   const [inventory, setInventory] = useState([]);
@@ -77,28 +78,42 @@ export const AppContainer = () => {
   return (
     <ThemeProvider>
       <GlobalStyles /> {/* Apply GlobalStyles */}
-      <Container>
-        <Box display="flex" flexDirection="column" alignItems="center" py={4}>
-          <CategorySelector
-            selectedCategory={selectedCategory}
-            onCategoryChange={handleCategoryChange}
-          />
-          <Button variant="contained" onClick={handleOpen} sx={{ marginY: 2 }}>
-            Add New Item
-          </Button>
-          {filteredInventory.length > 0 ? (
-            <InventoryList
-              inventory={filteredInventory}
-              flippedCards={flippedCards}
-              onRemove={removeItem}
-              onFlip={toggleCardFlip}
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={(theme) => ({
+          ...getNeumorphicContainerStyles(theme),
+          width: '100%',
+          minHeight: '100vh',
+          padding: '20px',
+          boxSizing: 'border-box'
+        })}
+      >
+        <Box width="100%" maxWidth="1200px">
+          <Box display="flex" flexDirection="column" alignItems="center" py={4}>
+            <CategorySelector
+              selectedCategory={selectedCategory}
+              onCategoryChange={handleCategoryChange}
             />
-          ) : (
-            <Typography variant="h6" sx={{ mt: 4 }}>No items found in this category.</Typography>
-          )}
+            <Button variant="contained" onClick={handleOpen} sx={(theme) => ({ ...getNeumorphicButtonStyles(theme), marginY: 2 })}>
+              Add New Item
+            </Button>
+            {filteredInventory.length > 0 ? (
+              <InventoryList
+                inventory={filteredInventory}
+                flippedCards={flippedCards}
+                onRemove={removeItem}
+                onFlip={toggleCardFlip}
+              />
+            ) : (
+              <Typography variant="h6" sx={{ mt: 4 }}>No items found in this category.</Typography>
+            )}
+          </Box>
         </Box>
         <AddItemModal open={open} onClose={handleClose} onAddItem={addItem} />
-      </Container>
+      </Box>
     </ThemeProvider>
   );
 };
