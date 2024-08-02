@@ -8,9 +8,9 @@ export const InventoryList = ({ inventory, flippedCards, onRemove, onFlip }) => 
   <Box display="flex" flexWrap="wrap" justifyContent="center" gap={2} mt={2}>
     {inventory.map((item) => (
       <InventoryItemCard
-        key={item.name}
+        key={item.id || item.Name}
         item={item}
-        isFlipped={flippedCards[item.name]}
+        isFlipped={flippedCards[item.id || item.Name]}
         onRemove={onRemove}
         onFlip={onFlip}
       />

@@ -52,40 +52,36 @@ const CardBack = styled(Card)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
 }));
 
-export const InventoryItemCard = ({ item, isFlipped, onRemove, onViewDetails, onFlip }) => (
+export const InventoryItemCard = ({ item, isFlipped, onRemove, onFlip }) => (
   <CardContainer>
     <CardFlipper isFlipped={isFlipped}>
       <CardFront>
         <CardContent>
-          <Typography variant="h5" gutterBottom>{item.name}</Typography>
-          <Typography variant="subtitle1">Category: {item.Category}</Typography>
-          <Typography variant="body2">Quantity: {item.quantity}</Typography>
+          <Typography variant="h5" gutterBottom>{item.Name || 'Unknown Item'}</Typography>
+          <Typography variant="subtitle1">Category: {item.Category || 'Uncategorized'}</Typography>
+          <Typography variant="body2">Quantity: {item.quantity || 'N/A'}</Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" color="primary" onClick={() => onRemove(item.name)}>
+          <Button size="small" color="primary" onClick={() => onRemove(item.id || item.Name)}>
             Remove
           </Button>
-          <Button size="small" color="primary" onClick={() => onFlip(item.name)}>
+          <Button size="small" color="primary" onClick={() => onFlip(item.id || item.Name)}>
             View Details
           </Button>
         </CardActions>
       </CardFront>
-      <CardBack onClick={() => onFlip(item.name)}>
+      <CardBack onClick={() => onFlip(item.id || item.Name)}>
         <CardContent>
           <Typography variant="h5" gutterBottom>Nutritional Value</Typography>
           {item.Nutritional_value && item.Nutritional_value.length > 0 ? (
             <TableContainer>
               <Table>
                 <TableBody>
-                  {item.Nutritional_value.map((value, index) => (
-                    <React.Fragment key={index}>
-                      {Object.keys(value).map((key) => (
-                        <TableRow key={key}>
-                          <TableCell>{key.replace(/_/g, ' ')}:</TableCell>
-                          <TableCell>{value[key]}</TableCell>
-                        </TableRow>
-                      ))}
-                    </React.Fragment>
+                  {Object.entries(item.Nutritional_value[0]).map(([key, value]) => (
+                    <TableRow key={key}>
+                      <TableCell>{key.replace(/_/g, ' ')}:</TableCell>
+                      <TableCell>{value}</TableCell>
+                    </TableRow>
                   ))}
                 </TableBody>
               </Table>

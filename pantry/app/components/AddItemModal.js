@@ -148,25 +148,32 @@ export const AddItemModal = ({ open, onClose, onAddItem }) => {
       const foodData = apiResponse.data;
   
       // Update form with received data
-      setItemName(foodData.Name);
-      setCategory(foodData.Category);
-      if (foodData.Nutritional_value && foodData.Nutritional_value.length > 0) {
-        const nutritionInfo = foodData.Nutritional_value[0];
-        setServingSize(nutritionInfo.Serving_Size);
-        setCalories(nutritionInfo.Calories.toString());
-        setTotalFat(nutritionInfo.Total_Fat);
-        setSaturatedFat(nutritionInfo.Saturated_Fat);
-        setTransFat(nutritionInfo.Trans_Fat);
-        setCholesterol(nutritionInfo.Cholesterol);
-        setSodium(nutritionInfo.Sodium);
-        setTotalCarbohydrates(nutritionInfo.Total_Carbohydrates);
-        setDietaryFiber(nutritionInfo.Dietary_Fiber);
-        setSugars(nutritionInfo.Sugars);
-        setProtein(nutritionInfo.Protein);
-      }
+      // setItemName(foodData.Name);
+      // setCategory(foodData.Category);
+      // if (foodData.Nutritional_value && foodData.Nutritional_value.length > 0) {
+      //   const nutritionInfo = foodData.Nutritional_value;
+      //   setServingSize(foodData.Nutritional_value.Serving_Size);
+      //   setCalories(foodData.Nutritional_value.Calories.toString());
+      //   setTotalFat(foodData.Nutritional_value.Total_Fat);
+      //   setSaturatedFat(foodData.Nutritional_value.Saturated_Fat);
+      //   setTransFat(foodData.Nutritional_value.Trans_Fat);
+      //   setCholesterol(foodData.Nutritional_value.Cholesterol);
+      //   setSodium(foodData.Nutritional_value.Sodium);
+      //   setTotalCarbohydrates(foodData.Nutritional_value.Total_Carbohydrates);
+      //   setDietaryFiber(foodData.Nutritional_value.Dietary_Fiber);
+      //   setSugars(foodData.Nutritional_value.Sugars);
+      //   setProtein(foodData.Nutritional_value.Protein);
+      // }
   
-      setShowManualEntry(true);
+      // setShowManualEntry(true);
+      onAddItem(foodData);
+
+      handleClose();
+
       alert("Item analyzed successfully!");
+
+      return foodData;
+
     } catch (error) {
       console.error('Error processing image:', error);
       if (error.response) {
