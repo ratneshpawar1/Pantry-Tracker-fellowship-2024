@@ -2,7 +2,8 @@
 "use client";
 import React, { useState, useMemo } from "react";
 import { ThemeProvider as MuiThemeProvider, createTheme } from "@mui/material/styles";
-import { CssBaseline, Switch, FormControlLabel, Box } from "@mui/material";
+import { CssBaseline, Box } from "@mui/material";
+import { Header } from "./Header";
 
 const lightTheme = createTheme({
   palette: {
@@ -10,7 +11,7 @@ const lightTheme = createTheme({
   },
 });
 
-const midnightTheme = createTheme({
+const darkTheme = createTheme({
   palette: {
     mode: "dark",
     background: {
@@ -27,7 +28,7 @@ export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState("light");
 
   const currentTheme = useMemo(
-    () => (theme === "light" ? lightTheme : midnightTheme),
+    () => (theme === "light" ? lightTheme : darkTheme),
     [theme]
   );
 
@@ -38,13 +39,10 @@ export const ThemeProvider = ({ children }) => {
   return (
     <MuiThemeProvider theme={currentTheme}>
       <CssBaseline />
-      <Box display="flex" justifyContent="center" p={2}>
-        <FormControlLabel
-          control={<Switch checked={theme === "dark"} onChange={handleThemeChange} />}
-          label="Midnight Mode"
-        />
+      <Header theme={theme} handleThemeChange={handleThemeChange} />
+      <Box width="100%" height="100vh" sx={{ backgroundColor: currentTheme.palette.background.default }}>
+        {children}
       </Box>
-      {children}
     </MuiThemeProvider>
   );
 };

@@ -33,7 +33,8 @@ const CardFront = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  boxShadow: theme.shadows[3],
+  boxShadow: theme.shadows[5],
+  borderRadius: theme.shape.borderRadius,
 }));
 
 const CardBack = styled(Card)(({ theme }) => ({
@@ -47,7 +48,8 @@ const CardBack = styled(Card)(({ theme }) => ({
   flexDirection: 'column',
   justifyContent: 'center',
   overflowY: "auto", // Enable vertical scrolling
-  boxShadow: theme.shadows[3],
+  boxShadow: theme.shadows[5],
+  borderRadius: theme.shape.borderRadius,
 }));
 
 export const InventoryItemCard = ({ item, isFlipped, onRemove, onViewDetails, onFlip }) => (
@@ -55,7 +57,7 @@ export const InventoryItemCard = ({ item, isFlipped, onRemove, onViewDetails, on
     <CardFlipper isFlipped={isFlipped}>
       <CardFront>
         <CardContent>
-          <Typography variant="h5">{item.name}</Typography>
+          <Typography variant="h5" gutterBottom>{item.name}</Typography>
           <Typography variant="subtitle1">Category: {item.Category}</Typography>
           <Typography variant="body2">Quantity: {item.quantity}</Typography>
         </CardContent>
@@ -70,7 +72,7 @@ export const InventoryItemCard = ({ item, isFlipped, onRemove, onViewDetails, on
       </CardFront>
       <CardBack onClick={() => onFlip(item.name)}>
         <CardContent>
-          <Typography variant="h5">Nutritional Value</Typography>
+          <Typography variant="h5" gutterBottom>Nutritional Value</Typography>
           {item.Nutritional_value && item.Nutritional_value.length > 0 ? (
             <TableContainer>
               <Table>
